@@ -43,6 +43,14 @@ export const deleteUserController = async (
   })
 }
 
+export const getListUsersController = async (req: Request, res: Response, next: NextFunction) => {
+  const data = await usersService.getAllUsers()
+  return res.json({
+    message: USERS_MESSAGES.GET_LIST_USERS_SUCCESS,
+    data
+  })
+}
+
 export const getUserByIdController = async (
   req: Request<getUserByIdParams, any, any>,
   res: Response,

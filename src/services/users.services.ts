@@ -17,6 +17,10 @@ class UsersService {
     return await databaseService.users.deleteOne({ _id: new ObjectId(id) })
   }
 
+  public async getAllUsers() {
+    return await databaseService.users.find().toArray()
+  }
+
   public async getUserById(id: string) {
     return await databaseService.users.findOne({ _id: new ObjectId(id) })
   }

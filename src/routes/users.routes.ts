@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   createUserController,
   deleteUserController,
+  getListUsersController,
   getUserByIdController,
   updateUserController
 } from '~/controllers/users.controllers'
@@ -31,6 +32,8 @@ usersRouter.put(
 )
 
 usersRouter.delete('/delete/:id', deleteUserValidator, wrapRequestHandler(deleteUserController))
+
+usersRouter.get('/list', wrapRequestHandler(getListUsersController))
 
 usersRouter.get('/:id', getUserByIdValidator, wrapRequestHandler(getUserByIdController))
 

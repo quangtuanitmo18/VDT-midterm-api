@@ -70,5 +70,6 @@ export const USERS_MESSAGES = {
   CREATE_USER_SUCCESS: 'Create user success',
   UPDATE_USER_SUCCESS: 'Update user success',
   DELETE_USER_SUCCESS: 'Delete user success',
+  GET_LIST_USERS_SUCCESS: 'Get list users success',
   GET_USER_BY_ID_SUCCESS: 'Get user by id success'
 } as const
