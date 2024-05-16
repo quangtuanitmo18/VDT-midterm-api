@@ -13,6 +13,10 @@ class UsersService {
     return await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: body })
   }
 
+  public async deleteUser(id: string) {
+    return await databaseService.users.deleteOne({ _id: new ObjectId(id) })
+  }
+
   public async getUserById(id: string) {
     return await databaseService.users.findOne({ _id: new ObjectId(id) })
   }

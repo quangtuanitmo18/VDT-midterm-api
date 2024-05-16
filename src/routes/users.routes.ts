@@ -1,7 +1,17 @@
 import { Router } from 'express'
-import { createUserController, getUserByIdController, updateUserController } from '~/controllers/users.controllers'
+import {
+  createUserController,
+  deleteUserController,
+  getUserByIdController,
+  updateUserController
+} from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
-import { createUserValidator, getUserByIdValidator, updateUserValidator } from '~/middlewares/users.middlewares'
+import {
+  createUserValidator,
+  deleteUserValidator,
+  getUserByIdValidator,
+  updateUserValidator
+} from '~/middlewares/users.middlewares'
 import { UserType } from '~/models/schemas/User.schema'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -19,6 +29,8 @@ usersRouter.put(
   filterMiddleware<UserType>(['fullname', 'gender', 'university']),
   wrapRequestHandler(updateUserController)
 )
+
+usersRouter.delete('/delete/:id', deleteUserValidator, wrapRequestHandler(deleteUserController))
 
 usersRouter.get('/:id', getUserByIdValidator, wrapRequestHandler(getUserByIdController))
 

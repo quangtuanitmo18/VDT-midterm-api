@@ -7,3 +7,7 @@ export interface getUserByIdParams extends ParamsDictionary {
 export interface updateUserByIdParams extends ParamsDictionary {
   id: string
 }
+
+export interface deleteUserByIdParams extends ParamsDictionary {
+  id: string
+}
