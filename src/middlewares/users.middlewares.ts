@@ -40,3 +40,8 @@ const userSchema: Schema = {
     trim: true
   }
 }
+
+export const createUserValidator = validate(checkSchema({ ...userSchema }, ['body']))
+export const updateUserValidator = validate(checkSchema({ ...userSchema }, ['body']))
+export const getUserByIdValidator = validate(checkSchema({ id: { notEmpty: true } }, ['params']))
+export const deleteUserValidator = validate(checkSchema({ id: { notEmpty: true } }, ['params']))
