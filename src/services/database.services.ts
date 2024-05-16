@@ -41,9 +41,9 @@ class DatabaseService {
 
     if (!exists) {
       this.users.createIndex({ fullname: 1, gender: 1, university: 1 })
-      this.users.createIndex({ fullname: 1 }, { unique: true })
-      this.users.createIndex({ gender: 1 }, { unique: true })
-      this.users.createIndex({ university: 1 }, { unique: true })
+      this.users.createIndex({ fullname: 1 })
+      this.users.createIndex({ gender: 1 })
+      this.users.createIndex({ university: 1 })
     }
   }
 
