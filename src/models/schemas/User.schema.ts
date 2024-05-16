@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 
-interface UserType {
+export interface UserType {
   _id?: ObjectId
   fullname: string
   gender: string

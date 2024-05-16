@@ -40,3 +40,5 @@ const userSchema: Schema = {
     trim: true
   }
 }
+
+export const createUserValidator = validate(checkSchema({ ...userSchema }, ['body']))
