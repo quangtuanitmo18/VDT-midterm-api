@@ -68,5 +68,6 @@ export const USERS_MESSAGES = {
   GET_VIDEO_STATUS_SUCCESS: 'Get video status success',
 
   CREATE_USER_SUCCESS: 'Create user success',
+  UPDATE_USER_SUCCESS: 'Update user success',
   GET_USER_BY_ID_SUCCESS: 'Get user by id success'
 } as const
