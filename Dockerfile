@@ -12,7 +12,6 @@ COPY tsconfig.json .
 COPY ecosystem.config.js .
 COPY .env.production .
 COPY ./src ./src
-COPY ./openapi ./openapi
 
 ## Build the application
 RUN npm run build
