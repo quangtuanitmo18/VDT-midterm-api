@@ -32,8 +32,7 @@ app.use(limiter)
 
 app.use(helmet())
 const corsOptions: CorsOptions = {
-  origin: isProduction ? envConfig.clientUrl : '*'
-  // origin: '*'
+  origin: '*'
 }
 app.use(cors(corsOptions))
 
