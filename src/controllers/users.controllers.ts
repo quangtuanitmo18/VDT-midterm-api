@@ -10,10 +10,10 @@ export const createUserController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const result = await usersService.createUser(req.body)
+  const data = await usersService.createUser(req.body)
   return res.json({
     message: USERS_MESSAGES.CREATE_USER_SUCCESS,
-    result
+    data
   })
 }
 
@@ -23,10 +23,10 @@ export const updateUserController = async (
   next: NextFunction
 ) => {
   const { id } = req.params
-  const result = await usersService.updateUser(id, req.body)
+  const data = await usersService.updateUser(id, req.body)
   return res.json({
     message: USERS_MESSAGES.UPDATE_USER_SUCCESS,
-    result
+    data
   })
 }
 

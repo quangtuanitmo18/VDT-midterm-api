@@ -20,7 +20,7 @@ databaseService.connect().then(() => {
 
 const app = express()
 
-const httpServer = createServer(app)
+export const httpServer = createServer(app)
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -48,3 +48,5 @@ app.use(defaultErrorHandler)
 httpServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+export default app
