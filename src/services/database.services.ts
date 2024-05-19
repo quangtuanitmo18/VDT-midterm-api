@@ -31,6 +31,9 @@ class DatabaseService {
       throw error
     }
   }
+  async disconnect() {
+    await this.client.close()
+  }
   async indexUsers() {
     const exists = await this.users.indexExists([
       'fullname_1_gender_1_university_1',

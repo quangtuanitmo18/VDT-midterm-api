@@ -5,12 +5,15 @@ import _omit from 'lodash/omit'
 
 class UsersService {
   public async createUser(user: UserType) {
-    return await databaseService.users.insertOne(new User({ ...user }))
+    const _id = new ObjectId()
+    await databaseService.users.insertOne(new User({ _id, ...user }))
+    return databaseService.users.findOne({ _id })
   }
 
   public async updateUser(id: string, user: UserType) {
     const body = _omit(user, ['_id', 'created_at', 'updated_at'])
-    return await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: body })
+    await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: body })
+    return await databaseService.users.findOne({ _id: new ObjectId(id) })
   }
 
   public async deleteUser(id: string) {
