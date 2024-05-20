@@ -1,5 +1,4 @@
 import { Collection, Db, MongoClient } from 'mongodb'
-import { config } from 'dotenv'
 import User from '~/models/schemas/User.schema'
 
 import { envConfig } from '~/constants/config'
@@ -7,25 +6,26 @@ import { envConfig } from '~/constants/config'
 const uri = `mongodb://${envConfig.dbUsername}:${envConfig.dbPassword}@${envConfig.dbHost}:${envConfig.dbPort}`
 
 class DatabaseService {
-  private client: MongoClient
-  private db: Db
-  constructor() {
-    this.client = new MongoClient(uri)
-    this.db = this.client.db(envConfig.dbName)
-  }
+  private client!: MongoClient
+  private db!: Db
 
-  async connect() {
+  async connect(uri: string, dbName: string) {
     try {
-      await this.db.command({ ping: 1 })
+      if (uri && dbName) {
+        this.client = new MongoClient(uri)
+        this.db = this.client.db(dbName)
 
-      const listConllections = await this.db.listCollections().toArray()
-      const ListCollectionsName = listConllections.map((collectionItem) => collectionItem.name)
+        await this.db.command({ ping: 1 })
 
-      if (!ListCollectionsName.includes('users')) {
-        await this.db.createCollection('users')
+        const listConllections = await this.db.listCollections().toArray()
+        const ListCollectionsName = listConllections.map((collectionItem) => collectionItem.name)
+
+        if (!ListCollectionsName.includes('users')) {
+          await this.db.createCollection('users')
+        }
+
+        console.log('Pinged your deployment. You successfully connected to MongoDB!')
       }
-
-      console.log('Pinged your deployment. You successfully connected to MongoDB!')
     } catch (error) {
       console.log('Error', error)
       throw error
@@ -56,4 +56,7 @@ class DatabaseService {
 }
 
 const databaseService = new DatabaseService()
+databaseService.connect(uri, envConfig.dbName).then(() => {
+  databaseService.indexUsers()
+})
 export default databaseService

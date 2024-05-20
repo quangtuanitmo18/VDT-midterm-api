@@ -1,0 +1,19 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore log files
+*.log
+npm-debug.log*
+
+# Ignore output directories
+dist
+
+# Ignore coverage directory
+coverage
+
+# Ignore Git directories and files
+.git
+.gitignore
+
+# Ignore lock files
+package-lock.json

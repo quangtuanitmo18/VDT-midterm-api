@@ -14,10 +14,6 @@ import { createServer } from 'http'
 
 config()
 
-databaseService.connect().then(() => {
-  databaseService.indexUsers()
-})
-
 const app = express()
 
 export const httpServer = createServer(app)

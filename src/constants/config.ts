@@ -27,8 +27,10 @@ export const envConfig = {
   port: (process.env.PORT as string) || 4000,
   host: process.env.HOST as string,
   dbName: process.env.DB_NAME as string,
+  dbNameTest: process.env.DB_NAME_TEST as string,
   dbUsername: process.env.DB_USERNAME as string,
   dbPassword: process.env.DB_PASSWORD as string,
   dbHost: process.env.DB_HOST as string,
+  dbHostTest: process.env.DB_HOST_TEST as string,
   dbPort: process.env.DB_PORT as string
 }
