@@ -1,9 +1,11 @@
 import request from 'supertest'
 import app, { httpServer } from '../src/index'
 import databaseService from '../src/services/database.services'
+import { envConfig } from '../src/constants/config'
 
 beforeAll(async () => {
-  await databaseService.connect()
+  const uri = `mongodb://${envConfig.dbUsername}:${envConfig.dbPassword}@${envConfig.dbHostTest}:${envConfig.dbPort}`
+  await databaseService.connect(uri,envConfig.dbNameTest)
 })
 afterAll(async () => {
   await databaseService.disconnect()
