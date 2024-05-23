@@ -7,7 +7,7 @@ def deployToServer(serverAddress) {
     sshagent(credentials: ['jenkins-ssh-key']) {
         sh """
             ssh -o StrictHostKeyChecking=no -i jenkins-ssh-key tuan@$serverAddress "echo \\\"${deploying}\\\" > deploy-api.sh \
-            && chmod +x deploy-api.sh && chown tuan:docker /var/run/docker.sock && chmod g+rw /var/run/docker.sock  && ./deploy-api.sh  && exit"
+            && chmod +x deploy-api.sh && ./deploy-api.sh  && exit"
         """  
     }
 
