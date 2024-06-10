@@ -1,0 +1,13 @@
+# api/values.yaml
+replicaCount: 3
+
+image:
+  repository: tuanquang1811/vdt-midterm-api
+  tag: v1
+  pullPolicy: IfNotPresent
+
+service:
+  name: vdt-api
+  type: NodePort
+  port: 4000
+  nodePort: 30003
