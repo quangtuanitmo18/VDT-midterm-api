@@ -1,17 +1,3 @@
-def deployToServer(serverAddress) {
-    def deploying = "#!/bin/bash \n" + 
-        "docker rm -f ${NAME_API} \n" +
-        "docker pull ${DOCKER_HUB}/${NAME_API}:$DOCKER_TAG \n" +
-        "docker run --name=${NAME_API} -d -p 4000:4000 ${DOCKER_HUB}/${NAME_API}:$DOCKER_TAG" 
-
-    sshagent(credentials: ['jenkins-ssh-key']) {
-        sh """
-            ssh -o StrictHostKeyChecking=no -i jenkins-ssh-key tuan@$serverAddress "echo \\\"${deploying}\\\" > deploy-api.sh \
-            && chmod +x deploy-api.sh && ./deploy-api.sh  && exit"
-        """  
-    }
-
-}
 def sendTelegramMessage(token, chatId, message) {
     sh """
     curl -s -X POST https://api.telegram.org/bot${token}/sendMessage -d chat_id=${chatId} -d text="${message}"
@@ -22,10 +8,14 @@ pipeline{
     agent any
     environment{
         PATH_PROJECT = '/home/projects/VDT-midterm-api'
+        PATH_CONFIG_PROJECT = '/home/projects/VDT-config/VDT-config-helm-api'
 
         SONAR_PROJECT_KEY = credentials('vdt-midterm-api-sonar-project-key')
         SONAR_TOKEN = credentials('sonarqube-token')
         SONAR_HOST_URL= credentials('sonar-host-url')
+
+        IP_GITLAB_SERVER = credentials('ip-gitlab-server')
+        NAME_REPO_CONFIG = 'vdt-config-helm-api'
 
         DOCKER_HUB ='tuanquang1811'
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
@@ -38,9 +28,6 @@ pipeline{
         TELEGRAM_CHAT_ID = credentials('telegram-chatId') 
         TEXT_PRE_BUILD = "Jenkins is building ${JOB_NAME}"
 
-        IP_APP_SERVER_1 = credentials('ip-app-server-1')
-        IP_APP_SERVER_2 = credentials('ip-app-server-2')
-
     }
     stages{
 
@@ -51,6 +38,7 @@ pipeline{
                 }
             }
         }
+        
         stage('Checkout source' ){
             steps{
                 sh "sudo cp -r . $PATH_PROJECT \
@@ -73,7 +61,7 @@ pipeline{
         }
         stage('Check lint and prettier'){
             steps{
-                sh "cd $PATH_PROJECT && npm install && npm run lint && npm run prettier"
+              sh "cd $PATH_PROJECT && npm install && npm run lint && npm run prettier"
             }
         }
         stage('Unit test with Jest'){
@@ -126,7 +114,7 @@ pipeline{
                 }
             }
         }
-        stage('Deploy'){
+        stage('Update version image in helm chart'){
             when {
                 expression {
                      return sh(script: 'git describe --exact-match --tags HEAD', returnStatus: true) == 0
@@ -136,12 +124,29 @@ pipeline{
                 script{
                     try {
                         timeout(time: 3, unit: 'MINUTES') {
-                            env.userChoice = input message: 'Do you want to deploy?',
-                                parameters: [choice(name: 'Versioning service', choices: 'Yes\nNo', description: 'Choose "Yes" if you want to deploy')]
+                            env.userChoice = input message: 'Do you want to update version image in helm chart?',
+                                parameters: [choice(name: 'Versioning service', choices: 'Yes\nNo', description: 'Choose "Yes" if you want to update version image in helm chart')]
                         }
                         if(env.userChoice == 'Yes') {   
-                            deployToServer(IP_APP_SERVER_1)
-                            deployToServer(IP_APP_SERVER_2)
+                            withCredentials([usernamePassword(credentialsId: 'gitlab-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                                sh """
+                                    rm -rf ${PATH_CONFIG_PROJECT}
+                                    
+                                    # Clone the repository
+                                    git clone http://${GIT_USERNAME}:${GIT_PASSWORD}@${IP_GITLAB_SERVER}/tuanmaintainer/${NAME_REPO_CONFIG}.git ${PATH_CONFIG_PROJECT}
+                                    cd ${PATH_CONFIG_PROJECT}
+
+                                    # Update the version in the values file
+                                    sed -i 's/tag:.*/tag: ${DOCKER_TAG}/' values.yaml
+
+                                    # Commit and push the changes
+                                    git config user.name "${GIT_USERNAME}"
+                                    git config user.email "${GIT_USERNAME}@git-server.com"
+                                    git add .
+                                    git commit -m "Update version to ${DOCKER_TAG}"
+                                    git push origin main
+                                """
+                            }
                         } else {
                             echo "deploy cancelled"
                         }
@@ -150,9 +155,9 @@ pipeline{
                         def user = err.getCauses()[0].getUser()
                         if('SYSTEM' == user.toString()) {
                             def didTimeout = true
-                            echo "Timeout. Deploy cancelled" 
+                            echo "Timeout. update version image in helm chart cancelled" 
                         } else {
-                            echo "Deploy cancelled by: ${user}"
+                            echo "Update version image in helm chart cancelled by: ${user}"
                         }
                     }
                 }
