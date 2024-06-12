@@ -12,11 +12,27 @@ import { envConfig, isProduction } from './constants/config'
 
 import { createServer } from 'http'
 
+import { Registry, collectDefaultMetrics, Counter } from 'prom-client'
+
 config()
 
 const app = express()
 
 export const httpServer = createServer(app)
+
+// create a registry to hold metrics
+const registry = new Registry()
+
+// enable default metrics like CPU usage, memory usage, etc.
+collectDefaultMetrics({ register: registry })
+
+// create a counter to track the number of requests
+const requestCounter = new Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  registers: [registry],
+  labelNames: ['method', 'path', 'status']
+})
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -36,6 +52,12 @@ const port = envConfig.port || 4000
 
 app.use(express.json())
 app.use('/users', usersRouter)
+
+// expose the metrics for Prometheus to scrape
+app.get('/metrics', async (req, res) => {
+  const result = await registry.metrics()
+  res.send(result)
+})
 
 app.get('/test-lb', (req, res) => res.send('Your request is called to backend server 1\n'))
 
