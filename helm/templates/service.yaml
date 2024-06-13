@@ -3,13 +3,19 @@ kind: Service
 metadata:
   name: {{ .Values.service.name }}
   namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "vdt-api.labels" . | nindent 4 }}
+    {{- with .Values.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - protocol: TCP
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
-      nodePort: {{ .Values.service.nodePort }}
+    {{- range $name, $port := .Values.service.ports }}
+    - name: {{ $name }}
+      port: {{ $port.port }}
+      targetPort: {{ $port.port }}
+      nodePort: {{ $port.nodePort }}
+    {{- end }}
   selector:
     app: {{ .Release.Name }}
-
