@@ -100,6 +100,17 @@ class UsersService {
       refresh_token
     }
   }
+  async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
+      user_id,
+      verify
+    })
+
+    return {
+      access_token,
+      refresh_token
+    }
+  }
 }
 
 const usersService = new UsersService()

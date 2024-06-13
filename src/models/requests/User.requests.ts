@@ -23,6 +23,11 @@ export interface RegisterReqBody {
   gender: string
 }
 
+export interface LoginReqBody {
+  username: string
+  password: string
+}
+
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenType

@@ -1,6 +1,8 @@
 import { checkSchema, ParamSchema, Schema } from 'express-validator'
 import { USERS_MESSAGES } from '~/constants/messages'
+import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
+import { hashPassword } from '~/utils/crypto'
 
 import { validate } from '~/utils/validation'
 
@@ -108,4 +110,32 @@ export const getUserByIdValidator = validate(checkSchema({ id: { notEmpty: true 
 export const deleteUserValidator = validate(checkSchema({ id: { notEmpty: true } }, ['params']))
 export const registerValidator = validate(
   checkSchema({ ...userSchema, password: { ...passwordSchema, notEmpty: true } }, ['body'])
+)
+
+export const loginValidator = validate(
+  checkSchema({
+    username: {
+      notEmpty: {
+        errorMessage: USERS_MESSAGES.USERNAME_IS_REQUIRED
+      },
+      isString: {
+        errorMessage: USERS_MESSAGES.USERNAME_MUST_BE_A_STRING
+      },
+      trim: true,
+      custom: {
+        options: async (value, { req }) => {
+          const user = await databaseService.users.findOne({
+            username: value,
+            password: hashPassword(req.body.password)
+          })
+          if (user === null) {
+            throw new Error(USERS_MESSAGES.USERNAME_OR_PASSWORD_IS_INCORRECT)
+          }
+          req.user = user
+          return true
+        }
+      }
+    },
+    password: passwordSchema
+  })
 )

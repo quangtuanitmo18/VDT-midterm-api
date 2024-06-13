@@ -4,6 +4,7 @@ import {
   deleteUserController,
   getListUsersController,
   getUserByIdController,
+  loginController,
   registerController,
   updateUserController
 } from '~/controllers/users.controllers'
@@ -12,6 +13,7 @@ import {
   createUserValidator,
   deleteUserValidator,
   getUserByIdValidator,
+  loginValidator,
   registerValidator,
   updateUserValidator
 } from '~/middlewares/users.middlewares'
@@ -40,5 +42,7 @@ usersRouter.get('/list', wrapRequestHandler(getListUsersController))
 usersRouter.get('/:id', getUserByIdValidator, wrapRequestHandler(getUserByIdController))
 
 usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+
+usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 export default usersRouter
