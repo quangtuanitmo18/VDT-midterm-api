@@ -25,7 +25,7 @@ export const USERS_MESSAGES = {
   LOGIN_SUCCESS: 'Login success',
   REGISTER_SUCCESS: 'Register success',
   USER_NOT_FOUND: 'User not found',
-  EMAIL_OR_PASSWORD_IS_INCORRECT: 'Email or password is incorrect',
+  USERNAME_OR_PASSWORD_IS_INCORRECT: 'Username or password is incorrect',
   ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   REFRESH_TOKEN_IS_INVALID: 'Refresh token is invalid',
@@ -71,5 +71,11 @@ export const USERS_MESSAGES = {
   UPDATE_USER_SUCCESS: 'Update user success',
   DELETE_USER_SUCCESS: 'Delete user success',
   GET_LIST_USERS_SUCCESS: 'Get list users success',
-  GET_USER_BY_ID_SUCCESS: 'Get user by id success'
+  GET_USER_BY_ID_SUCCESS: 'Get user by id success',
+  USERNAME_IS_REQUIRED: 'Username is required',
+  USERNAME_MUST_BE_A_STRING: 'Username must be a string',
+  USERNAME_ALREADY_EXISTS: 'Username already exists',
+  ROLE_IS_REQUIRED: 'Role is required',
+  ROLE_MUST_BE_A_STRING: 'Role must be a string',
+  PERMISSION_DENIED: 'Permission denied'
 } as const
