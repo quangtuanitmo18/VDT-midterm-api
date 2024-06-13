@@ -32,5 +32,10 @@ export const envConfig = {
   dbPassword: process.env.DB_PASSWORD as string,
   dbHost: process.env.DB_HOST as string,
   dbHostTest: process.env.DB_HOST_TEST as string,
-  dbPort: process.env.DB_PORT as string
+  dbPort: process.env.DB_PORT as string,
+  passwordSecret: process.env.PASSWORD_SECRET as string,
+  jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
+  jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,
+  refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN as string,
+  accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN as string
 }
