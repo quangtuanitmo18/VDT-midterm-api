@@ -5,6 +5,7 @@ enum UserVerifyStatus {
   Verified, // đã xác thực email
   Banned // bị khóa
 }
+export type UserRole = 'admin' | 'user'
 export interface UserType {
   _id?: ObjectId
   fullname: string
@@ -12,7 +13,7 @@ export interface UserType {
   university: string
   username: string
   password: string
-  role: string
+  role: UserRole
   created_at?: Date
   updated_at?: Date
 }
@@ -24,7 +25,7 @@ export default class User {
   university: string
   username: string
   password: string
-  role: string
+  role: UserRole
   created_at?: Date
   updated_at?: Date
 

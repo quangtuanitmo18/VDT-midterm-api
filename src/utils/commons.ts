@@ -13,7 +13,7 @@ export const verifyAccessToken = async (access_token: string, req?: Request) => 
   if (!access_token) {
     throw new ErrorWithStatus({
       message: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED,
-      status: HTTP_STATUS.UNAUTHORIZED
+      status: HTTP_STATUS.FORBIDDEN
     })
   }
   try {
@@ -29,7 +29,7 @@ export const verifyAccessToken = async (access_token: string, req?: Request) => 
   } catch (error) {
     throw new ErrorWithStatus({
       message: capitalize((error as JsonWebTokenError).message),
-      status: HTTP_STATUS.UNAUTHORIZED
+      status: HTTP_STATUS.FORBIDDEN
     })
   }
 }

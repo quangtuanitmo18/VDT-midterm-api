@@ -24,3 +24,11 @@ export class EntityError extends ErrorWithStatus {
     this.errors = errors
   }
 }
+
+export class ForbiddenError extends ErrorWithStatus {
+  errors: ErrorsType
+  constructor({ message = USERS_MESSAGES.PERMISSION_DENIED, errors }: { message?: string; errors: ErrorsType }) {
+    super({ message, status: HTTP_STATUS.FORBIDDEN })
+    this.errors = errors
+  }
+}

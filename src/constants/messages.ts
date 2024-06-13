@@ -76,5 +76,6 @@ export const USERS_MESSAGES = {
   USERNAME_MUST_BE_A_STRING: 'Username must be a string',
   USERNAME_ALREADY_EXISTS: 'Username already exists',
   ROLE_IS_REQUIRED: 'Role is required',
-  ROLE_MUST_BE_A_STRING: 'Role must be a string'
+  ROLE_MUST_BE_A_STRING: 'Role must be a string',
+  PERMISSION_DENIED: 'Permission denied'
 } as const

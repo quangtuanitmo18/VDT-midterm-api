@@ -1,5 +1,9 @@
+import { Request, Response, NextFunction } from 'express'
 import { checkSchema, ParamSchema, Schema } from 'express-validator'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/models/Errors'
+import { TokenPayload } from '~/models/requests/User.requests'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { hashPassword } from '~/utils/crypto'
@@ -139,3 +143,16 @@ export const loginValidator = validate(
     password: passwordSchema
   })
 )
+
+export const isAdminValidator = (req: Request, res: Response, next: NextFunction) => {
+  const { role } = req.decoded_authorization as TokenPayload
+  if (role !== 'admin') {
+    return next(
+      new ErrorWithStatus({
+        message: USERS_MESSAGES.PERMISSION_DENIED,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
